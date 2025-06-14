@@ -1,103 +1,112 @@
 import Image from "next/image";
+import Link from "next/link";
+import Header from "../../components/Header"; // Assurez-vous que le chemin d'importation est correct
+import Card from "../../components/Card";
+import Footer from "../../components/Footer";
+import LocationMap from "../../lib/LocationMap";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const cards = [
+    {
+      title: "Hébergement",
+      link: "/housing",
+      imagesrc: "/images/housing/photo1.jpg",
+    },
+    {
+      title: "Réservations",
+      link: "/booking",
+      imagesrc: "/images/booking/schedule.jpg",
+    },
+    {
+      title: "Soins",
+      link: "/wellness",
+      imagesrc: "/images/soins/sweetlights.jpg",
+    },
+    {
+      title: "Contact",
+      link: "/contact",
+      imagesrc: "/images/contact/contact.jpg",
+    },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    // Conteneur principal de la page.
+
+    <div className="min-h-screen flex flex-col font-[family-name:var(--font-geist-sans)]">
+      <div className="relative w-full h-screen overflow-hidden">
+        <Image
+          src="/images/homepage/carrelet_acc.jpg"
+          alt="Carrelet en bord de mer au lever du soleil"
+          fill
+          priority
+          className="object-cover"
+        />
+
+        {/* Overlay de dégradé : */}
+
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0C1824]/100 via-[#0C1824]/80 to-transparent"></div>
+
+        {/* Le composant Header superposé : */}
+        {/* `absolute top-0 left-0 w-full z-10`: Positionne le header en haut, à gauche, sur toute la largeur, au-dessus de l'image. */}
+        {/* `bg-transparent`: Rends le fond du header transparent pour voir l'image. */}
+        <header className="absolute top-0 left-0 w-full z-10 bg-transparent">
+          <Header />
+        </header>
+
+        {/* Contenu textuel superposé : Titre et paragraphe */}
+        {/* `absolute`: Positionne le bloc de texte par rapport à la section "hero" parente. */}
+        {/* `top-1/2 -translate-y-1/2`: Centre verticalement le bloc de texte (utilise la moitié de la hauteur et le déplace de sa propre moitié vers le haut). */}
+        {/* `left-[10vw]`: Aligne le texte avec le padding gauche du header (10% de la largeur du viewport). */}
+        {/* `z-20`: S'assure que le texte est au-dessus de tout le reste (image, dégradé, header). */}
+        {/* `text-white`: Rend le texte blanc pour un bon contraste avec le dégradé foncé. */}
+        {/* `max-w-md`: Limite la largeur du texte sur les grands écrans pour une meilleure lisibilité. */}
+        {/* `px-8 sm:px-12 md:px-16`: Padding horizontal pour les petits écrans. */}
+        <div className="absolute top-1/2 -translate-y-1/2 left-[10vw] z-20 text-white max-w-md px-8 sm:px-0">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight">
+            Bienvenue dans votre havre de paix
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl leading-relaxed">
+            Découvrez une expérience unique où le confort moderne rencontre la
+            sérénité de la nature. Nous vous offrons un lieu idéal pour vous
+            ressourcer, loin du tumulte quotidien. Profitez de notre hébergement
+            d'exception et de nos soins bien-être sur mesure.
+          </p>
+          {/* Optionnel: Bouton d'appel à l'action */}
+          <Link href={"/housing"}>
+            <button className="mt-6 px-6 py-3 bg-[#FECD31] text-[#0C1824] font-semibold rounded-lg shadow-lg hover:bg-[#FFB01F] transition-colors duration-300 transform hover:scale-105 cursor-pointer">
+              Découvrez notre offre
+            </button>
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      </div>
+
+      {/* Reste du contenu de la page (en dessous de la section hero) */}
+      {/* `flex-grow`: Permet à cette section de prendre tout l'espace vertical restant. */}
+      {/* `p-8 pb-20 sm:p-20`: Padding général. */}
+      {/* `flex flex-col items-center justify-center`: Centrage du contenu. */}
+      <div className="flex-grow p-8 pb-20 sm:p-20 flex flex-col items-center justify-center">
+        <h2 className="text-3xl font-bold text-center mb-8 text-[#FECD31]">
+          Nos Services et Expériences
+        </h2>
+        <p className="text-lg text-center text-white max-w-2xl">
+          Que vous recherchiez une escapade relaxante, une aventure en pleine
+          nature ou un séjour axé sur le bien-être, nous avons ce qu'il vous
+          faut. Plongez dans un monde de tranquillité et de confort.
+        </p>
+      </div>
+      {/* Ajoutez d'autres sections de contenu ici (cards, formulaires, etc.) */}
+      <div className="flex flex-col items-center md:grid md:grid-cols-2 lg:grid-cols-4 md:flex-row md:justify-center md:space-x-6 gap-6 p-10">
+        {cards.map((card) => (
+          <Card
+            key={card.title}
+            title={card.title}
+            link={card.link}
+            imagesrc={card.imagesrc}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        ))}
+      </div>
+      <LocationMap></LocationMap>
+      <Footer></Footer>
     </div>
   );
 }
