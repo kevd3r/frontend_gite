@@ -15,7 +15,6 @@ import {
   Waves,
   Sailboat,
   Store, // Remplaçant pour Toaster (grille-pain)
-  UserCircle, // Remplaçant pour HairDryer (sèche-cheveux)
 } from "lucide-react";
 import Image from "next/image";
 import Footer from "../../../components/Footer";

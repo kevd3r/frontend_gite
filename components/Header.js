@@ -29,7 +29,7 @@ const Header = () => {
       url: "/booking",
     },
     {
-      title: "Soins",
+      title: "Soins bien-être",
       url: "/wellness",
     },
     {
@@ -48,7 +48,7 @@ const Header = () => {
       className={`w-full h-[10vh] flex justify-between items-center px-[5vw] z-10 transition-colors duration-300 ${headerBgClass}`}
     >
       <Link href={"/"}>
-        <Image src={profilePic} alt="Logo" width={80} height={80} />
+        <Image src={profilePic} alt="Logo" width={60} height={60} />
       </Link>
       
       <ul className="flex gap-4">

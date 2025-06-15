@@ -1,0 +1,236 @@
+Site frontend : 
+-> create-next-app avec tailwindcss
+-> npm install lucide-react pour les icones
+
+
+
+ce qui manque :
+-> petite bio de christophe avec une photo poru les soins
+-> contact : avec adresse, mail et tel ?
+-> réseaux sociaux ?
+-> mettre un copyright
+-> menu dropdown
+
+
+Réservations : 
+-> full calendar 
+
+
+Admin à faire :
+-> page d'accueil Admin/ login
+-> cookie de session Admin
+-> bdd mysql prisma
+-> schéma de base de données
+-> 
+
+
+Détails à régler : 
+-> factoriser le footer et le mettre dans le layout (+ propre)
+
+
+
+
+----------------------------------------------------------------------------------------------------
+****************************************************************************************************
+----------------------------------------------------------------------------------------------------
+
+Contact :
+-> pour rendre le formulaire de contact actif : 
+
+// pages/api/contact.js
+
+export default async function handler(req, res) {
+  // Ne traiter que les requêtes POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Méthode non autorisée' });
+  }
+
+  // Récupérer les données du corps de la requête
+  const { name, email, phone, message } = req.body;
+
+  // Validation simple des données
+  if (!name || !email || !message) {
+    return res.status(400).json({ message: 'Nom, email et message sont requis.' });
+  }
+
+  // --- Ici, vous ajouterez la logique pour envoyer l'e-mail ou sauvegarder les données ---
+
+  // Exemple d'envoi d'e-mail avec Nodemailer (nécessite installation)
+  // Ou intégration avec un service tiers (SendGrid, Mailgun, etc.)
+
+  // Pour l'instant, simulons un envoi réussi
+  console.log('Données reçues du formulaire :');
+  console.log(`Nom: ${name}`);
+  console.log(`Email: ${email}`);
+  console.log(`Téléphone: ${phone || 'Non renseigné'}`);
+  console.log(`Message: ${message}`);
+
+  // Simuler un délai pour montrer l'état de chargement
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // Envoyer une réponse de succès
+  res.status(200).json({ message: 'Message envoyé avec succès !' });
+
+  // --- Fin de la logique d'envoi ---
+}
+
+// pages/contact.js
+
+import Head from 'next/head';
+import Footer from '../../components/Footer';
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useState } from 'react'; // Importez useState
+
+const Contact = () => {
+  // Définir les états pour chaque champ du formulaire
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
+  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', 'loading'
+
+  // Fonction pour gérer la soumission du formulaire
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Empêche le rechargement de la page
+
+    setSubmissionStatus('loading'); // Indiquer que l'envoi est en cours
+
+    try {
+      const res = await fetch('/api/contact', { // Endpoint de l'API que nous allons créer
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, phone, message }),
+      });
+
+      if (res.ok) {
+        setSubmissionStatus('success');
+        // Réinitialiser les champs du formulaire après succès
+        setName('');
+        setEmail('');
+        setPhone('');
+        setMessage('');
+      } else {
+        setSubmissionStatus('error');
+        const errorData = await res.json();
+        console.error("Erreur lors de l'envoi :", errorData.message);
+      }
+    } catch (error) {
+      setSubmissionStatus('error');
+      console.error("Erreur réseau ou inattendue :", error);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0C1824] text-white pt-20 pb-12">
+      <Head>
+        <title>Contactez-nous - Votre Hébergement</title>
+        <meta name="description" content="Contactez-nous pour toute demande d'information, réservation ou question sur nos services et soins bien-être." />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div className="container mx-auto px-4 md:px-8 max-w-7xl">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-12 text-[#FECD31]">
+          Contactez-nous
+        </h1>
+
+        <section className="bg-[#14273A] p-8 rounded-lg shadow-lg mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-[#FECD31]">Informations de contact</h2>
+          <div className="space-y-4 text-lg text-white">
+            <p className="flex items-center">
+              <Mail className="inline-block mr-3 text-2xl text-blue-400" /> Email : <a href="mailto:votre.email@example.com" className="hover:underline ml-2">votre.email@example.com</a>
+            </p>
+            <p className="flex items-center">
+              <Phone className="inline-block mr-3 text-2xl text-blue-400" /> Téléphone : <a href="tel:+33688648195" className="hover:underline ml-2">06.88.64.81.95</a> (Christophe)
+            </p>
+            <p className="flex items-center">
+              <MapPin className="inline-block mr-3 text-2xl text-blue-400" /> Adresse : Votre adresse ici, Ville, Code Postal
+            </p>
+            <p className="mt-6">
+              N'hésitez pas à nous contacter pour toute question, demande d'information ou pour planifier votre séjour et vos soins. Nous vous répondrons dans les plus brefs délais.
+            </p>
+          </div>
+        </section>
+
+        {/* Section Formulaire de Contact */}
+        <section className="bg-[#14273A] p-8 rounded-lg shadow-lg mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-[#FECD31]">Envoyez-nous un message</h2>
+          <form className="space-y-6" onSubmit={handleSubmit}> {/* Ajoutez onSubmit ici */}
+            <div>
+              <label htmlFor="name" className="block text-lg font-medium text-white mb-2">Votre Nom</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-white"
+                placeholder="Entrez votre nom"
+                value={name} // Liez la valeur à l'état
+                onChange={(e) => setName(e.target.value)} // Mettez à jour l'état
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-lg font-medium text-white mb-2">Votre Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-white"
+                placeholder="Entrez votre email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="phone" className="block text-lg font-medium text-white mb-2">Votre Téléphone (optionnel)</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-white"
+                placeholder="Entrez votre numéro de téléphone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="message" className="block text-lg font-medium text-white mb-2">Votre Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-white"
+                placeholder="Tapez votre message ici..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-[#FECD31] text-[#0C1824] font-bold py-3 px-6 rounded-md hover:bg-yellow-400 transition-colors duration-300 flex items-center justify-center text-lg"
+              disabled={submissionStatus === 'loading'} // Désactiver le bouton pendant l'envoi
+            >
+              {submissionStatus === 'loading' ? 'Envoi en cours...' : 'Envoyer le message'}
+              <Send className="ml-2 w-5 h-5" />
+            </button>
+
+            {/* Affichage du statut de soumission */}
+            {submissionStatus === 'success' && (
+              <p className="text-green-500 text-center mt-4">Votre message a été envoyé avec succès !</p>
+            )}
+            {submissionStatus === 'error' && (
+              <p className="text-red-500 text-center mt-4">Une erreur est survenue lors de l'envoi. Veuillez réessayer plus tard.</p>
+            )}
+          </form>
+        </section>
+
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default Contact;

@@ -100,15 +100,15 @@ const wellness = () => {
 
         {/* Section "En savoir +" sur le Shiatsu */}
         <section className="bg-[#14273A] p-8 rounded-lg shadow-lg">
-          <h2 className="text-3xl font-bold mb-6 text-[#FECD31]">Qu'est-ce que le Shiatsu ?</h2>
+          <h2 className="text-3xl font-bold mb-6 text-[#FECD31]">Qu&apos;est-ce que le Shiatsu ?</h2>
           <div className="space-y-4 text-lg text-white">
             <p className="flex items-start">
               <Hand className="w-8 h-8 mr-4 text-blue-400 flex-shrink-0 mt-1" />
-              Le Shiatsu est une technique de massage d'origine japonaise qui consiste à exercer des séries de pressions - relâchements sur l'ensemble du corps à l'aide des paumes et des pouces.
+              Le Shiatsu est une technique de massage d&apos;origine japonaise qui consiste à exercer des séries de pressions - relâchements sur l&apos;ensemble du corps à l&apos;aide des paumes et des pouces.
             </p>
             <p className="flex items-start">
               <HeartPulse className="w-8 h-8 mr-4 text-blue-400 flex-shrink-0 mt-1" />
-              C'est une technique douce, profondément relaxante, qui vise à harmoniser l'énergie corporelle et à diminuer les douleurs musculaires et articulaires, favorisant un bien-être général.
+              C&apos;est une technique douce, profondément relaxante, qui vise à harmoniser l&apos;énergie corporelle et à diminuer les douleurs musculaires et articulaires, favorisant un bien-être général.
             </p>
           </div>
         </section>
